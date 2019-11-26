@@ -2,7 +2,6 @@
   "name": "ctx-tasks-data",
   "version": "1.0.0",
   "description": "Pybossa tasks",
-  "main": "index.js",
   "scripts": {
     "test": "node test-schema.js",
     "test_schema": "node test-schema.js"
@@ -10,6 +9,10 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "ajv": "^6.10.2"
+    "ajv": "^6.10.2",
+    "html-webpack-inline-source-plugin": "0.0.10",
+    "html-webpack-plugin": "^3.2.0",
+    "webpack": "^4.41.2",
+    "webpack-cli": "^3.3.10"
   }
 }
