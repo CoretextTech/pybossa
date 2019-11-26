@@ -1,0 +1,25 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Binary Classification Input Schema",
+  "type": "object",
+  "properties": {
+    "default_value": {
+      "title": "Default value",
+      "enum": ["yes", "no", "no_document", "dont_know"] 
+    },
+    "pdf_link": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?|https):\/\/.+[.]pdf$"
+    },
+    "docx_link": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?|https):\/\/.+[.]docx$"
+    }
+  },
+  "anyOf": [
+    { "required": [ "pdf_link" ] },
+    { "required": [ "docx_link" ] }
+  ]
+}

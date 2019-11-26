@@ -1,0 +1,15 @@
+{
+  "name": "ctx-tasks-data",
+  "version": "1.0.0",
+  "description": "Pybossa tasks",
+  "main": "index.js",
+  "scripts": {
+    "test": "node test-schema.js",
+    "test_schema": "node test-schema.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "ajv": "^6.10.2"
+  }
+}

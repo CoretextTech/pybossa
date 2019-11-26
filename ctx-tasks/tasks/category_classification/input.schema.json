@@ -1,0 +1,32 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Binary Classification Input Schema",
+  "type": "object",
+  "properties": {
+    "options": {
+      "description": "Options are separated by the '|' delimiter",
+      "type": "string",
+      "pattern": "^[A-z0-9 |]+$"
+    },
+    "default_value": {
+      "title": "Default Categories for the Document separated by the '|' delimiter",
+      "type": "string",
+      "pattern": "^[A-z0-9 |]+$"
+    },
+    "pdf_link": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?|https):\/\/.+[.]pdf$"
+    },
+    "docx_link": {
+      "type": "string",
+      "format": "uri",
+      "pattern": "^(https?|https):\/\/.+[.]docx$"
+    }
+  },
+  "anyOf": [
+    { "required": [ "pdf_link" ] },
+    { "required": [ "docx_link" ] }
+  ],
+  "required": ["options"]
+}

@@ -1,0 +1,19 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Binary Classification Output Schema",
+  "type": "object",
+  "properties": {
+    "answer": {
+      "title": "The Document is Contract",
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "rationale": {
+      "title": "Brief rationale for the answer",
+      "type": "string"
+    }
+  },
+  "required": ["answer", "rationale"]
+}
