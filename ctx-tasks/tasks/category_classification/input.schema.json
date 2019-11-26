@@ -1,32 +1,27 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Binary Classification Input Schema",
+  "title": "Categories Classification Input Schema",
   "type": "object",
   "properties": {
+    "title": {
+      "type": "string"
+    },
     "options": {
       "description": "Options are separated by the '|' delimiter",
       "type": "string",
       "pattern": "^[A-z0-9 |]+$"
     },
-    "default_value": {
-      "title": "Default Categories for the Document separated by the '|' delimiter",
+    "default_classified": {
+      "description": "Categories classified by algorythm and separated by the '|' delimiter",
       "type": "string",
       "pattern": "^[A-z0-9 |]+$"
     },
-    "pdf_link": {
+    "link": {
+      "description": "Link to the Document body (.docx or .pdf)",
       "type": "string",
       "format": "uri",
-      "pattern": "^(https?|https):\/\/.+[.]pdf$"
-    },
-    "docx_link": {
-      "type": "string",
-      "format": "uri",
-      "pattern": "^(https?|https):\/\/.+[.]docx$"
+      "pattern": "^(https?|http):\/\/.+[.](pdf|docx)$"
     }
   },
-  "anyOf": [
-    { "required": [ "pdf_link" ] },
-    { "required": [ "docx_link" ] }
-  ],
-  "required": ["options"]
+  "required": ["options", "default_classified", "link"]
 }

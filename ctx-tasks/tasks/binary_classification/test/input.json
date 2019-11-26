@@ -1,5 +1,4 @@
 {
-  "default_value": "no",
-  "pdf_link": "https://example.com/example.pdf",
-  "docx_link": "https://example.com/example.docx"
+  "default_classified": "no",
+  "link": "https://example.com/example.pdf"
 }

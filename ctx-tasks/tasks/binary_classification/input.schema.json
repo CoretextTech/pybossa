@@ -3,23 +3,16 @@
   "title": "Binary Classification Input Schema",
   "type": "object",
   "properties": {
-    "default_value": {
+    "default_classified": {
       "title": "Default value",
       "enum": ["yes", "no", "no_document", "dont_know"] 
     },
-    "pdf_link": {
+    "link": {
+      "description": "Link to the Document body (.docx or .pdf)",
       "type": "string",
       "format": "uri",
-      "pattern": "^(https?|https):\/\/.+[.]pdf$"
-    },
-    "docx_link": {
-      "type": "string",
-      "format": "uri",
-      "pattern": "^(https?|https):\/\/.+[.]docx$"
+      "pattern": "^(https?|http):\/\/.+[.](pdf|docx)$"
     }
   },
-  "anyOf": [
-    { "required": [ "pdf_link" ] },
-    { "required": [ "docx_link" ] }
-  ]
+  "required": ["link", "default_classified"]
 }
