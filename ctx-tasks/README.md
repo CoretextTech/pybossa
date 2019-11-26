@@ -1,6 +1,6 @@
 # Pybossa tasks
 
-NodeJS v10+ required
+NodeJS v10.10.0+ required
 
 <code>npm install</code> first
 
