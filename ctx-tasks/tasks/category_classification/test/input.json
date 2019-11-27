@@ -1,6 +1,6 @@
 {
   "title": "Some document title",
   "options": "Corporate | Financial | Commercial | Human Resources | Intellectual Property | Real Estate | Miscellaneous",
-  "default_classified": "Corporate | Financial | Miscellaneous",
+  "classification_result": "Corporate | Financial | Miscellaneous",
   "link": "https://example.com/example.pdf"
 }
