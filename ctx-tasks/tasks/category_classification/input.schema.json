@@ -11,7 +11,7 @@
       "type": "string",
       "pattern": "^[A-z0-9 |]+$"
     },
-    "default_classified": {
+    "classification_result": {
       "description": "Categories classified by algorythm and separated by the '|' delimiter",
       "type": "string",
       "pattern": "^[A-z0-9 |]+$"
