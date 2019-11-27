@@ -4,7 +4,8 @@
   "description": "Pybossa tasks",
   "scripts": {
     "test": "node test-schema.js",
-    "test_schema": "node test-schema.js"
+    "test_schema": "node test-schema.js",
+    "build": "node build-tasks.js"
   },
   "author": "",
   "license": "ISC",
