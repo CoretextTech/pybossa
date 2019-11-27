@@ -1,57 +1,43 @@
+import { validateInput, validateOutput } from '../../pybossa-helpers.js';
+
 import inputSchema from '../input.schema.json';
-import outputSchema from '../input.schema.json';
+import outputSchema from '../output.schema.json';
 
 (function() {
-  $submit     = $('#submit');
-  $category   = $('#category');
-  $title      = $('#title');
-
-  const ajv = new Ajv();
+  const $submit = $('#submit');
+  const $isContract = $('#is_contract');
+  const $rationale = $('#rationale');
+  const $docBody = $('#document_body');
 
   pybossa.taskLoaded(function(task, deferred){
-    if (task && task.info) {
-      const valid = ajv.validate(inputSchema, task.info);
+    const valid = validateInput(task.info, inputSchema);
 
-      if (valid)
-        deferred.resolve(task);
-      else
-        alert('Invalid Input data');
-    }
-    else {
-      alert('No task data');
-    }
+    if (valid)
+      deferred.resolve(task);
   });
 
-  pybossa.presentTask(function(task, deferred){
-    if (!$.isEmptyObject(task)) {
-      $category.empty();
-      task.info['options']
-        .split('|')
-        .forEach(op => $category
-          .append($('<option/>')
-            .attr('value', op)
-            .attr('selected', op === task.info['category_name'])
-            .text(op)));
-      $title.text(`"${task.info['tag']}"`);
+  pybossa.presentTask(function(task, deferred) {
+    $rationale.val('');
+    $isContract.val(task.info['classification_result']);
+    $docBody.html(`<embed src="${task.info['link']}" width="100%" height="320"/>`);
 
-      $submit
-        .removeAttr('disabled')
-        .off('click')
-        .click(e => {
-          $submit.attr('disabled', 'true');
-          const answer = $category.val();
-          const valid = ajv.validate(outputSchema, answer);
+    $submit
+      .removeAttr('disabled')
+      .off('click')
+      .click(e => {
+        $submit.attr('disabled', 'true');
+        
+        const answer = {
+          'answer': $isContract.val(),
+          'rationale': $rationale.val(),
+        };
 
-          if (!valid)
-            alert('Invalid Output data!');
-          else if (typeof answer === undefined)
-            alert('Something wrong!');
-          else
-            pybossa
-              .saveTask(task.id, answer)
-              .done(deferred.resolve);
-          });
-    }
+        const valid = validateOutput(answer, outputSchema);
+
+        valid && pybossa
+          .saveTask(task.id, answer)
+          .done(deferred.resolve);
+        });
   });
 
   pybossa.run('coretext-title-classifier');
