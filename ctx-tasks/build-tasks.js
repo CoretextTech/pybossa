@@ -4,6 +4,33 @@ const webpack = require('webpack');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const HtmlWebpackInlineSourcePlugin = require('html-webpack-inline-source-plugin');
 
+class Without {
+  constructor(patterns) {
+      this.patterns = patterns;
+  }
+
+  apply(compiler) {
+      compiler.hooks.emit.tapAsync("MiniCssExtractPluginCleanup", (compilation, callback) => {
+          Object.keys(compilation.assets)
+              .filter(asset => {
+                  let match = false,
+                      i = this.patterns.length
+                  ;
+                  while (i--) {
+                      if (this.patterns[i].test(asset)) {
+                          match = true;
+                      }
+                  }
+                  return match;
+              }).forEach(asset => {
+                  delete compilation.assets[asset];
+              });
+
+          callback();
+      });
+  }
+}
+
 const getDirectories = source =>
   fs.readdirSync(source, { withFileTypes: true })
     .filter(dirent => dirent.isDirectory())
@@ -37,7 +64,8 @@ getDirectories('./tasks/').forEach(t => {
           useShortDoctype: true
         },
       }),
-      new HtmlWebpackInlineSourcePlugin()
+      new HtmlWebpackInlineSourcePlugin(),
+      new Without([/main.js/u]),
     ]
   }, (err, stats) => { // Stats Object
     const info = stats.toJson();
