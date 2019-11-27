@@ -3,8 +3,8 @@
   "title": "Binary Classification Input Schema",
   "type": "object",
   "properties": {
-    "default_classified": {
-      "title": "Default value",
+    "classification_result": {
+      "title": "Classification result",
       "enum": ["yes", "no", "no_document", "dont_know"] 
     },
     "link": {
@@ -14,5 +14,5 @@
       "pattern": "^(https?|http):\/\/.+[.](pdf|docx)$"
     }
   },
-  "required": ["link", "default_classified"]
+  "required": ["link", "classification_result"]
 }
