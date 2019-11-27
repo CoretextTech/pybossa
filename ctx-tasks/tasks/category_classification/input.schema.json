@@ -7,7 +7,7 @@
       "type": "string"
     },
     "options": {
-      "description": "Options are separated by the '|' delimiter",
+      "description": "Agreement types for classification separated by the '|' delimiter",
       "type": "string",
       "pattern": "^[A-z0-9 |]+$"
     },
