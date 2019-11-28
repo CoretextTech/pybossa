@@ -10,8 +10,7 @@
     "link": {
       "description": "Link to the Document body (.docx or .pdf)",
       "type": "string",
-      "format": "uri",
-      "pattern": "^(https?|http):\/\/.+[.](pdf|docx).*$"
+      "pattern": "^((https?|http):\/\/.+[.](pdf|docx).*)*$"
     }
   },
   "required": ["link", "classification_result"]

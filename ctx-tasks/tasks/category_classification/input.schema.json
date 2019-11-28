@@ -9,18 +9,17 @@
     "options": {
       "description": "Agreement types for classification separated by the '|' delimiter",
       "type": "string",
-      "pattern": "^[A-z0-9 |]+$"
+      "pattern": "^[A-z0-9 |]*$"
     },
     "classification_result": {
       "description": "Categories classified by algorythm and separated by the '|' delimiter",
       "type": "string",
-      "pattern": "^[A-z0-9 |]+$"
+      "pattern": "^[A-z0-9 |]*$"
     },
     "link": {
       "description": "Link to the Document body (.docx or .pdf)",
       "type": "string",
-      "format": "uri",
-      "pattern": "^(https?|http):\/\/.+[.](pdf|docx).*$"
+      "pattern": "^((https?|http):\/\/.+[.](pdf|docx).*)*$"
     }
   },
   "required": ["options", "link"]
