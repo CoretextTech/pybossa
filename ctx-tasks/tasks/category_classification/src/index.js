@@ -3,7 +3,7 @@ import { validateInput, validateOutput } from '../../pybossa-helpers.js';
 import inputSchema from '../input.schema.json';
 import outputSchema from '../output.schema.json';
 
-const TASK_NAME = 'BCT';
+const TASK_NAME = 'categories-classification';
 
 (function() {
   const $submit = $('#submit');

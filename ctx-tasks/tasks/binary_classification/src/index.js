@@ -3,7 +3,7 @@ import { validateInput, validateOutput } from '../../pybossa-helpers.js';
 import inputSchema from '../input.schema.json';
 import outputSchema from '../output.schema.json';
 
-const TASK_NAME = 'coretext-title-classifier';
+const TASK_NAME = 'binary-classification';
 
 (function() {
   const $submit = $('#submit');
