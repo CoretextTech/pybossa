@@ -3,6 +3,8 @@ import { validateInput, validateOutput } from '../../pybossa-helpers.js';
 import inputSchema from '../input.schema.json';
 import outputSchema from '../output.schema.json';
 
+const TASK_NAME = 'BCT';
+
 (function() {
   const $submit = $('#submit');
   const $title = $('#title');
@@ -65,5 +67,5 @@ import outputSchema from '../output.schema.json';
         });
   });
 
-  pybossa.run('BCT');
+  pybossa.run(TASK_NAME);
 })();

@@ -3,6 +3,8 @@ import { validateInput, validateOutput } from '../../pybossa-helpers.js';
 import inputSchema from '../input.schema.json';
 import outputSchema from '../output.schema.json';
 
+const TASK_NAME = 'coretext-title-classifier';
+
 (function() {
   const $submit = $('#submit');
   const $isContract = $('#is_contract');
@@ -40,5 +42,5 @@ import outputSchema from '../output.schema.json';
         });
   });
 
-  pybossa.run('coretext-title-classifier');
+  pybossa.run(TASK_NAME);
 })();
