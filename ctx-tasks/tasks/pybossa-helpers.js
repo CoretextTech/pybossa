@@ -1,5 +1,9 @@
 const ajv = new Ajv();
 
+export const onTaskLoaded = () => {
+  window.scrollTo({ top: 0, behavior: "smooth" }); 
+}
+
 export const validateInput = (jsonInfo, inputSchema) => {
   if (jsonInfo) {
     const valid = ajv.validate(inputSchema, jsonInfo);

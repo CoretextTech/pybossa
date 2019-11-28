@@ -1,4 +1,4 @@
-import { validateInput, validateOutput } from '../../pybossa-helpers.js';
+import { validateInput, validateOutput, onTaskLoaded } from '../../pybossa-helpers.js';
 
 import inputSchema from '../input.schema.json';
 import outputSchema from '../output.schema.json';
@@ -12,14 +12,15 @@ const TASK_NAME = 'categories-classification';
   const $rationale = $('#rationale');
   const $docBody = $('#document_body');
 
-  pybossa.taskLoaded(function(task, deferred){
+  pybossa.taskLoaded(function(task, deferred) {
+    onTaskLoaded();
     const valid = validateInput(task.info, inputSchema);
 
     if (valid)
       deferred.resolve(task);
   });
 
-  pybossa.presentTask(function(task, deferred){
+  pybossa.presentTask(function(task, deferred) {
     $rationale.val('');
     $categories.empty();
     $docBody.html((task.info['link'] && task.info['link'].length)
