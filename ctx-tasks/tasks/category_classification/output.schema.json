@@ -4,7 +4,7 @@
   "type": "object",
   "properties": {
     "answer": {
-      "title": "Is the Document Contract",
+      "title": "List of Categories",
       "type": "array",
       "items": {
         "type": "string"

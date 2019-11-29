@@ -1,0 +1,16 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Categories Classification Input Schema",
+  "type": "object",
+  "properties": {
+    "extracted_date": {
+      "type": "string",
+      "pattern": "^([0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4})?$"
+    },
+    "link": {
+      "description": "Link to the Document body (.docx or .pdf)",
+      "type": "string",
+      "pattern": "^((https?|http):\/\/.+[.](pdf|docx).*)*$"
+    }
+  }
+}

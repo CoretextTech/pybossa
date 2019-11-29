@@ -73,6 +73,6 @@ getDirectories('./tasks/').forEach(t => {
     if (err || stats.hasErrors())
       console.error(String(info.errors));
     else
-      console.log(`Task "${t}" has been successfully compiled to ${taskDir}/dist/bundle.html`)
+      console.log(`\n Task "${t}" has been successfully compiled to ${taskDir}/dist/bundle.html`)
   });
 });

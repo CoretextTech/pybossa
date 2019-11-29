@@ -1,0 +1,26 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Categories Classification Output Schema",
+  "type": "object",
+  "properties": {
+    "answer": {
+      "type": "object",
+      "properties": {
+        "is_right": {
+          "title": "The Date is right",
+          "type": "string",
+          "enum": ["yes", "no", "no_document", "dont_know", "not_a_contract"] 
+        },
+        "selected_data": {
+          "title": "Actual date if classified date is incorrect",
+          "type": "string"
+        }
+      }
+    },
+    "rationale": {
+      "title": "Brief rationale for the answer",
+      "type": "string"
+    }
+  },
+  "required": ["answer"]
+}
