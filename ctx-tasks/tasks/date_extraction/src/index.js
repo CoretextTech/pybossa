@@ -60,8 +60,12 @@ const TASK_NAME = 'date-extraction';
     $selectButton
       .off('click')
       .click(e => {
-        const selected = getSelectedInDoc();
-        selected && $selectedText.html(selected);
+        const selectedText = getSelectedInDoc();
+        
+        if (selectedText) {
+          $selectedText.html(selectedText);
+          findInDoc(selectedText);
+        } 
       })
 
     $submit
