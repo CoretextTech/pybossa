@@ -58,6 +58,10 @@ export const findInDoc = (phrase) => {
   }))
 }
 
+export const clearSelection = () => {
+  document.dispatchEvent(new CustomEvent("clearselection"))
+}
+
 export const renderPdfViewer = (url, container) => {
   const pdfLinkService = new pdfjsViewer.PDFLinkService();
   
@@ -88,10 +92,23 @@ export const renderPdfViewer = (url, container) => {
         phraseSearch: true
       });
     }
-  })
+  });
+
+  document.addEventListener('clearselection', (e) => {
+    const selection = window.getSelection();
+
+    if (selection)
+      selection.empty ? selection.empty() : selection.removeAllRanges();
+
+    pdfFindController && pdfFindController.executeCommand('find', {
+      query: '',
+      highlightAll: true,
+      phraseSearch: true
+    });
+  });
   
   // Loading document.
-  var loadingTask = pdfjsLib.getDocument(url);
+  const loadingTask = pdfjsLib.getDocument(url);
   loadingTask.promise
     .then((pdfDocument) => {
       pdfViewer.setDocument(pdfDocument);

@@ -5,7 +5,7 @@ import {
   renderPdfViewer,
   findInDoc,
   getSelectedInDoc,
-  disablePdfLinks
+  clearSelection
 } from '../../pybossa-helpers.js';
 
 import inputSchema from '../input.schema.json';
@@ -18,12 +18,14 @@ const TASK_NAME = 'date-extraction';
   const $rationale = $('#rationale');
   const $docBody = $('#document_body');
   const $selectedText = $('#selected_text');
-  const $selectButton = $('#select_button');
   const $recognitionForm = $('#recognition_form');
   const $isRightData = $('#is_right_data');
   const $classificatedDate = $('#classificated_date');
 
   $isRightData.change(e => {
+    clearSelection();
+    $selectedText.html('');
+
     if (e.target.value === 'no')
       $recognitionForm.slideDown();
     else
@@ -57,16 +59,18 @@ const TASK_NAME = 'date-extraction';
       $docBody.html(`<p>No document body link</p>`);
     }
 
-    $selectButton
-      .off('click')
-      .click(e => {
-        const selectedText = getSelectedInDoc();
-        
-        if (selectedText) {
-          $selectedText.html(selectedText);
-          findInDoc(selectedText);
-        } 
-      })
+    $docBody
+      .off('mouseup')
+      .on('mouseup', () => {
+        if ($isRightData.val() === 'no') {
+          const selectedText = getSelectedInDoc();
+
+          if (selectedText) {
+            $selectedText.html(selectedText);
+            findInDoc(selectedText);
+          } 
+        }
+      });
 
     $submit
       .removeAttr('disabled')
