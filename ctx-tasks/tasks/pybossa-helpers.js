@@ -75,6 +75,7 @@ export const renderPdfViewer = (url, container) => {
 
   document.addEventListener('pagesinit', function () {
     pdfViewer.currentScaleValue = 'page-width';
+    container.scrollTop = 20;
   });
 
   document.addEventListener('findindoc', (e) => {
