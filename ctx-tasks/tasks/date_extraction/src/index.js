@@ -18,6 +18,7 @@ const TASK_NAME = 'date-extraction';
   const $submit = $('#submit');
   const $rationale = $('#rationale');
   const $docBody = $('#document_body');
+  const $viewer = $('#viewer');
   const $selectedText = $('#selected_text');
   const $recognitionForm = $('#recognition_form');
   const $isRightData = $('#is_right_data');
@@ -25,29 +26,20 @@ const TASK_NAME = 'date-extraction';
 
   $recognitionForm.hide();
 
-  $isRightData.change(e => {
-    clearSelection();
-    $selectedText.html('');
-
-    if (e.target.value === 'no')
-      $recognitionForm.slideDown();
-    else
-      $recognitionForm.slideUp();
-  })
-
   pybossa.taskLoaded((task, deferred) => {
     const valid = validateInput(task.info, inputSchema);
 
     if (valid) {
       if (task.info['link'] && task.info['link']) 
         loadDocument(task.info['link'])
-          .then(doc => deferred.resolve({ task, doc }));
+          .then(doc => deferred.resolve({ task, doc }))
+          .catch(e => deferred.resolve({ task, doc: null, error: 'Failed to fetch document' }));
       else
-        deferred.resolve({ task, doc: null });
+        deferred.resolve({ task, doc: null, error: 'No document body link' });
     }
   });
 
-  pybossa.presentTask(({ task, doc }, deferred) => {
+  pybossa.presentTask(({ task, doc, error }, deferred) => {
     onTaskLoaded();
     $isRightData.val('yes');
     $rationale.val('');
@@ -58,13 +50,28 @@ const TASK_NAME = 'date-extraction';
     $classificatedDate.html(hasDate ? task.info['extracted_date'] : 'No Date');
 
     if (doc) {
-      $docBody.html('<div id="viewer" class="pdfViewer"></div>');
-      renderPdfViewer(doc, $docBody.get(0))
-      hasDate && findInDoc(task.info['extracted_date']);
+      $viewer.html('');
+      renderPdfViewer(doc, $docBody.get(0));
+      hasDate && findInDoc(task.info['date_raw']);
     }
     else {
-      $docBody.html(`<p>No document body link</p>`);
+      $viewer.html(`<p>${error}</p>`);
     }
+
+    $isRightData
+      .off('change')
+      .on('change', e => {
+        clearSelection();
+        $selectedText.html('');
+
+        if (e.target.value === 'no') {
+          $recognitionForm.slideDown();
+        }
+        else {
+          hasDate && findInDoc(task.info['date_raw']);
+          $recognitionForm.slideUp();
+        }
+      });
 
     $docBody
       .off('mouseup')

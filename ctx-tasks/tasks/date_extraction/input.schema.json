@@ -7,6 +7,9 @@
       "type": "string",
       "pattern": "^([0-9]{1,2}\/[0-9]{1,2}\/[0-9]{4})?$"
     },
+    "date_raw": {
+      "type": "string"
+    },
     "link": {
       "description": "Link to the Document body (.docx or .pdf)",
       "type": "string",

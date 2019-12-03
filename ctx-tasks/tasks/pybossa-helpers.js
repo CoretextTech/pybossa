@@ -64,11 +64,7 @@ export const clearSelection = () => {
 
 export const loadDocument = (url) => {
   const loadingTask = pdfjsLib.getDocument(url);
-  return loadingTask.promise
-    .catch(e => {
-      const viewer = document.getElementById('viewer');
-      viewer.innerText = 'Failed to fetch the Document!'
-    })
+  return loadingTask.promise;
 }
 
 export const renderPdfViewer = (pdfDocument, container) => {
@@ -88,7 +84,7 @@ export const renderPdfViewer = (pdfDocument, container) => {
 
   document.addEventListener('pagesinit', function () {
     pdfViewer.currentScaleValue = 'page-width';
-    container.scrollTop = 20;
+    container.scrollTop || (container.scrollTop = 20);
   });
 
   document.addEventListener('findindoc', (e) => {
