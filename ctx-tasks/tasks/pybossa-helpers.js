@@ -62,7 +62,16 @@ export const clearSelection = () => {
   document.dispatchEvent(new CustomEvent("clearselection"))
 }
 
-export const renderPdfViewer = (url, container) => {
+export const loadDocument = (url) => {
+  const loadingTask = pdfjsLib.getDocument(url);
+  return loadingTask.promise
+    .catch(e => {
+      const viewer = document.getElementById('viewer');
+      viewer.innerText = 'Failed to fetch the Document!'
+    })
+}
+
+export const renderPdfViewer = (pdfDocument, container) => {
   const pdfLinkService = new pdfjsViewer.PDFLinkService();
   
   const pdfFindController = new pdfjsViewer.PDFFindController({
@@ -107,15 +116,6 @@ export const renderPdfViewer = (url, container) => {
     });
   });
   
-  // Loading document.
-  const loadingTask = pdfjsLib.getDocument(url);
-  loadingTask.promise
-    .then((pdfDocument) => {
-      pdfViewer.setDocument(pdfDocument);
-      pdfLinkService.setDocument(pdfDocument, null);
-    })
-    .catch(e => {
-      const viewer = document.getElementById('viewer');
-      viewer.innerText = 'Failed to fetch the Document!'
-    })
+  pdfViewer.setDocument(pdfDocument);
+  pdfLinkService.setDocument(pdfDocument, null);
 }

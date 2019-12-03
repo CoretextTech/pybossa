@@ -2,6 +2,7 @@ import {
   validateInput,
   validateOutput,
   onTaskLoaded,
+  loadDocument,
   renderPdfViewer,
   findInDoc,
   getSelectedInDoc,
@@ -22,6 +23,8 @@ const TASK_NAME = 'date-extraction';
   const $isRightData = $('#is_right_data');
   const $classificatedDate = $('#classificated_date');
 
+  $recognitionForm.hide();
+
   $isRightData.change(e => {
     clearSelection();
     $selectedText.html('');
@@ -32,27 +35,31 @@ const TASK_NAME = 'date-extraction';
       $recognitionForm.slideUp();
   })
 
-  pybossa.taskLoaded(function(task, deferred) {
+  pybossa.taskLoaded((task, deferred) => {
     onTaskLoaded();
     const valid = validateInput(task.info, inputSchema);
 
-    if (valid)
-      deferred.resolve(task);
+    if (valid) {
+      if (task.info['link'] && task.info['link']) 
+        loadDocument(task.info['link'])
+          .then(doc => deferred.resolve({ task, doc }));
+      else
+        deferred.resolve({ task, doc: null });
+    }
   });
 
-  pybossa.presentTask(function(task, deferred) {
+  pybossa.presentTask(({ task, doc }, deferred) => {
     $isRightData.val('yes');
     $rationale.val('');
     $selectedText.html('')
-    $docBody.html('<div id="viewer" class="pdfViewer"></div>');
     $recognitionForm.hide();
 
-    if (task.info['link'] && task.info['link']) {
-      const hasDate = task.info['extracted_date'] && task.info['extracted_date'].length;
+    const hasDate = task.info['extracted_date'] && task.info['extracted_date'].length;
+    $classificatedDate.html(hasDate ? task.info['extracted_date'] : 'No Date');
 
-      renderPdfViewer(task.info['link'], $docBody.get(0));
-
-      $classificatedDate.html(hasDate ? task.info['extracted_date'] : 'No Date');
+    if (doc) {
+      $docBody.html('<div id="viewer" class="pdfViewer"></div>');
+      renderPdfViewer(doc, $docBody.get(0))
       hasDate && findInDoc(task.info['extracted_date']);
     }
     else {
@@ -91,7 +98,7 @@ const TASK_NAME = 'date-extraction';
         valid && pybossa
           .saveTask(task.id, answer)
           .done(deferred.resolve);
-        });
+      });
   });
 
   pybossa.run(TASK_NAME);
