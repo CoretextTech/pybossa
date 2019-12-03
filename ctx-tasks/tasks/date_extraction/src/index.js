@@ -36,7 +36,6 @@ const TASK_NAME = 'date-extraction';
   })
 
   pybossa.taskLoaded((task, deferred) => {
-    onTaskLoaded();
     const valid = validateInput(task.info, inputSchema);
 
     if (valid) {
@@ -49,6 +48,7 @@ const TASK_NAME = 'date-extraction';
   });
 
   pybossa.presentTask(({ task, doc }, deferred) => {
+    onTaskLoaded();
     $isRightData.val('yes');
     $rationale.val('');
     $selectedText.html('')

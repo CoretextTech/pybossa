@@ -12,17 +12,24 @@ const TASK_NAME = 'binary-classification';
   const $docBody = $('#document_body');
 
   pybossa.taskLoaded(function(task, deferred) {
-    onTaskLoaded();
     const valid = validateInput(task.info, inputSchema);
 
-    if (valid)
-      deferred.resolve(task);
+    if (valid) {
+      if (task.info['link'] && task.info['link'].length) {
+        const $doc = $(`<embed src="${task.info['link']}" width="100%" height="320"/>`);
+        $doc.ready(() => deferred.resolve({ task, content: $doc.get(0) }))
+      }
+      else {
+        deferred.resolve({ task, content: $(`<p>No document body</p>`).get(0) });
+      }
+    }
   });
 
-  pybossa.presentTask(function(task, deferred) {
+  pybossa.presentTask(({ task, content }, deferred) => {
+    onTaskLoaded();
     $rationale.val('');
     $isContract.val(task.info['classification_result']);
-    $docBody.html(`<embed src="${task.info['link']}" width="100%" height="320"/>`);
+    $docBody.html(content);
 
     $submit
       .removeAttr('disabled')
