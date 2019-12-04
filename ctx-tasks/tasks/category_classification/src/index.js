@@ -17,7 +17,7 @@ const TASK_NAME = 'categories-classification';
 
     if (valid) {
       if (task.info['link'] && task.info['link'].length) {
-        const $doc = $(`<embed src="${task.info['link']}" width="100%" height="320"/>`);
+        const $doc = $(`<embed src="${task.info['link']}"/>`);
         $doc.ready(() => deferred.resolve({ task, content: $doc.get(0) }))
       }
       else {
