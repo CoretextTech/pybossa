@@ -1,0 +1,112 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "Segmentation Check Data Schema",
+  "type": "object",
+  "properties": {
+    "appendix": {
+      "title": "Excess data",
+      "type": "array",
+      "items": [
+        {
+          "title": "Start pos",
+          "type": "number"
+        },
+        {
+          "title": "Text body",
+          "type": "string"
+        }
+      ]
+    },
+    "body": {
+      "title": "Body part",
+      "type": "array",
+      "items": [
+        {
+          "title": "Start pos",
+          "type": "number"
+        },
+        {
+          "title": "End pos",
+          "type": "number"
+        },
+        {
+          "title": "Segment list",
+          "type": "array",
+          "items": {
+            "title": "Text body",
+            "type": "string"
+          }
+        }
+      ]
+    },
+    "cover": {
+      "title": "Cover part",
+      "type": "array",
+      "items": [
+        {
+          "title": "Start pos",
+          "type": "number"
+        },
+        {
+          "title": "End pos",
+          "type": "number"
+        },
+        {
+          "title": "Text body",
+          "type": "string"
+        }
+      ]
+    },
+    "signature": {
+      "title": "Signature part list",
+      "type": "array",
+      "items": {
+        "title": "Single Signature",
+        "type": "array",
+        "items": [
+          {
+            "title": "Start pos",
+            "type": "number"
+          },
+          {
+            "title": "End pos",
+            "type": "number"
+          },
+          {
+            "title": "Text body",
+            "type": "string"
+          }
+        ]
+      }
+    },
+    "toc": {
+      "title": "Toc part",
+      "type": "array",
+      "items": [
+        {
+          "title": "Start pos",
+          "type": "number"
+        },
+        {
+          "title": "End pos",
+          "type": "number"
+        },
+        {
+          "title": "Segment list",
+          "type": "array",
+          "items": {
+            "title": "Text body",
+            "type": "string"
+          }
+        }
+      ]
+    }
+  },
+  "required": [
+    "appendix",
+    "body",
+    "cover",
+    "signature",
+    "toc"
+  ]
+}

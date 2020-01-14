@@ -1,0 +1,48 @@
+<style>
+  #document_body {
+    background: #EEE;
+    min-height: 200px;
+    height: 300px;
+    resize: vertical;
+    overflow: auto;
+  }
+
+  #all_pages {
+    height: 9999px;
+  }
+</style>
+
+<div class="container">
+  <h1>Please recognize the Date of the Contract</h1>
+  <p>Is <b id="classificated_date"></b> the correct Date of the Contract?</p>
+  <div>
+    <select id="is_right_data">
+      <option value="yes">Yes</option>
+      <option value="no">No</option>
+      <option value="no_document">No document</option>
+      <option value="dont_know">Dont know</option>
+      <option value="not_a_contract">Thats not a Contract</option>
+    </select>
+  </div>
+  <br/>
+  <div id="recognition_form">
+    <p>Please select the right data in Document.</p>
+    <p>Selected data: <b id="selected_text"></b></p>
+  </div>
+  <br/>
+  <div id="document_body">
+    <div id="all_pages">
+      <div id="viewer" class="pdfViewer"></div>
+    </div>
+  </div>
+  <br/>
+  <p>Could you write some rationale for your decision.</p>
+  <textarea id="rationale" cols="80" rows="4"></textarea>
+  <br/>
+  <br/>
+  <input id="submit" class="btn btn-primary" type="button" value="Done" disabled>
+</div>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf_viewer.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/ajv/6.10.2/ajv.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.3.200/pdf_viewer.js"></script>
