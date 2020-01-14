@@ -43,6 +43,7 @@ const COLORS = [
   const $rationale = $('#rationale');
   const $docBody = $('#all_pages');
   const $viewer = $('#viewer');
+  const $segForm = $('#segmentation_form');
 
   pybossa.taskLoaded(function(task, deferred) {
     if (task && task.id) {
@@ -77,36 +78,62 @@ const COLORS = [
       $viewer.html('');
       renderPdfViewer(doc, $docBody.get(0));
 
-      setTimeout(() => {
-        const segments = Object
-          .keys(json)
-          .reduce((acc, k) => Array.isArray(json[k][0])
-            ? [...acc, ...json[k].reduce((acc, arr, i) => [...acc, [`${k}|${i}`, ...arr]], [])]
-            : [...acc, [k, ...json[k]]]
-          , [])
-          .filter(s => s[1] > -1)
-          .sort((s1, s2) => s1[1] - s2[1])
-          .map(s => isFinite(s[2]) ? s : (s.splice(2,0,-1) && s))
-          .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
-          .map(s => (s[3] = s[3].replace(/[\s\c]/g, '')) && s)
-          // .map(s => s.map(a => Array.isArray(a) ? a.join('\n') : a))
-          // .map(s => (s[3] = s[3].split('\n').filter(s => s.replace(/^\s+$/gu, ''))) && s)
+      const segments = Object
+        .keys(json)
+        .reduce((acc, k) => Array.isArray(json[k][0])
+          ? [...acc, ...json[k].reduce((acc, arr, i) => [...acc, [`${k}_${i}`, ...arr]], [])]
+          : [...acc, [k, ...json[k]]]
+        , [])
+        .filter(s => s[1] > -1)
+        .sort((s1, s2) => s1[1] - s2[1])
+        .map(s => isFinite(s[2]) ? s : (s.splice(2,0,-1) && s))
+        .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
+        .map(s => (s[3] = s[3].replace(/[\s\c]/g, '')) && s);
 
-        $('.textLayer span').map((i, span) => {
-          const noSpaceText = span.innerText.replace(/[\s\c]/g, '');
+      segments.forEach((s, i) => {
+        $segForm.append(`
+          <span style="
+            background: ${COLORS[i]};
+            width: 15px;
+            height: 15px;
+            display: inline-block;
+            opacity: 0.5;
+          "></span>
+          <input type="checkbox" name="${s[0]}"/>
+          <label>${s[0]}</label>
+          <br/>
+        `);
+      });
 
-          for (const j in segments) {
-            const pos = segments[j][3].indexOf(noSpaceText);
+      const onDocumentLoad = setInterval(() => {
+        if (!document.querySelector('.page .loadingIcon')) {
+          clearInterval(onDocumentLoad);
 
-            if (pos === -1)
-              continue;
+          $('.textLayer span').map((i, span) => {
+            const noSpaceText = span.innerText
+              .replace(/[\s\c]/g, '')
+              .replace('„', '‘')
+              .replace('‟', '’');
 
-            segments[j][3] = segments[j][3].replace(noSpaceText, '');
-            span.style.backgroundColor = COLORS[j];
-            break;
-          }
-        });
-      }, 3000)
+            for (const j in segments) {
+              if (!segments[j][3].length)
+                continue;
+
+              const pos = segments[j][3].indexOf(noSpaceText);
+
+              // Check for miss entries
+              pos === -1 && console.log('missed', noSpaceText, segments[j][3].slice(0, noSpaceText.length))
+
+              if (pos === -1)
+                continue;
+
+              segments[j][3] = segments[j][3].replace(noSpaceText, '');
+              span.style.backgroundColor = COLORS[j];
+              break;
+            }
+          });
+        }
+      }, 500);
     }
     else {
       $viewer.html(`<p>${error}</p>`);
@@ -118,8 +145,15 @@ const COLORS = [
       .click(e => {
         $submit.attr('disabled', 'true');
 
+        const formData = $segForm
+          .serializeArray()
+          .reduce((acc, i) => ({
+            ...acc,
+            [i.name]: i.value && true
+          }), {});
+
         const answer = {
-          'answer': null,
+          'answer': formData,
           'rationale': $rationale.val(),
         };
 

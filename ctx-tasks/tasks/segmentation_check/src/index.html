@@ -8,27 +8,12 @@
   }
 
   #all_pages {
-    height: 9999px;
+    height: auto;
   }
 </style>
 
 <div class="container">
-  <h1>Please recognize the Date of the Contract</h1>
-  <p>Is <b id="classificated_date"></b> the correct Date of the Contract?</p>
-  <div>
-    <select id="is_right_data">
-      <option value="yes">Yes</option>
-      <option value="no">No</option>
-      <option value="no_document">No document</option>
-      <option value="dont_know">Dont know</option>
-      <option value="not_a_contract">Thats not a Contract</option>
-    </select>
-  </div>
-  <br/>
-  <div id="recognition_form">
-    <p>Please select the right data in Document.</p>
-    <p>Selected data: <b id="selected_text"></b></p>
-  </div>
+  <h1>Please check bad Segments in the Document</h1>
   <br/>
   <div id="document_body">
     <div id="all_pages">
@@ -36,8 +21,11 @@
     </div>
   </div>
   <br/>
+  <p>Please set <b>bad segments checked</b></p>
+  <form id="segmentation_form"></form>
+  <br/>
   <p>Could you write some rationale for your decision.</p>
-  <textarea id="rationale" cols="80" rows="4"></textarea>
+  <textarea id="rationale" name="rationale" cols="80" rows="4"></textarea>
   <br/>
   <br/>
   <input id="submit" class="btn btn-primary" type="button" value="Done" disabled>

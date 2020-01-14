@@ -3,36 +3,35 @@
   "title": "Segmentation Check Output Schema",
   "type": "object",
   "properties": {
-    "appendix": {
-      "title": "Excess data validation",
-      "type": "boolean"
-    },
-    "body": {
-      "title": "Body part validation",
-      "type": "boolean"
-    },
-    "cover": {
-      "title": "Cover part validation",
-      "type": "boolean"
-    },
-    "signature": {
-      "title": "Signature part list validation",
-      "type": "boolean"
-    },
-    "toc": {
-      "title": "Toc part validation",
-      "type": "boolean"
+    "answer": {
+      "type": "object",
+      "properties": {
+        "appendix": {
+          "title": "Excess data validation",
+          "type": "boolean"
+        },
+        "body": {
+          "title": "Body part validation",
+          "type": "boolean"
+        },
+        "cover": {
+          "title": "Cover part validation",
+          "type": "boolean"
+        },
+        "signature": {
+          "title": "Signature part list validation",
+          "type": "boolean"
+        },
+        "toc": {
+          "title": "Toc part validation",
+          "type": "boolean"
+        }
+      }
     },
     "rationale": {
       "title": "Brief rationale for the answer",
       "type": "string"
     }
   },
-  "required": [
-    "appendix",
-    "body",
-    "cover",
-    "signature",
-    "toc"
-  ]
+  "required": ["answer"]
 }
