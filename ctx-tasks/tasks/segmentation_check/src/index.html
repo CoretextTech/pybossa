@@ -2,9 +2,12 @@
   #document_body {
     background: #EEE;
     min-height: 200px;
-    height: 300px;
+    height: 500px;
     resize: vertical;
     overflow: auto;
+    min-width: 520px;
+    width: 70%;
+    margin: auto;
   }
 
   #all_pages {
@@ -13,13 +16,15 @@
 
   #render_indicator {
     text-align: center;
+    background: beige;
+    padding: 10px;
   }
 </style>
 
 <div class="container">
   <h1>Please check bad Segments in the Document</h1>
   <br/>
-  <div id="render_indicator">The document is being rendered...</div>
+  <div id="render_indicator">Segments are being render...</div>
   <div id="document_body">
     <div id="all_pages">
       <div id="viewer" class="pdfViewer"></div>

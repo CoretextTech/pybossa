@@ -3,10 +3,7 @@ import {
   validateOutput,
   onTaskLoaded,
   loadDocument,
-  renderPdfViewer,
-  findInDoc,
-  getSelectedInDoc,
-  clearSelection
+  renderPdfViewer
 } from '../../pybossa-helpers.js';
 
 import inputSchema from '../input.schema.json';
@@ -73,6 +70,7 @@ const COLORS = [
     $rationale.val('');
 
     if (doc) {
+      $segForm.html('');
       $viewer.html('');
       $render.show();
       renderPdfViewer(doc, $docBody.get(0));
@@ -111,6 +109,7 @@ const COLORS = [
           $('.textLayer span').map((i, span) => {
             const noSpaceText = span.innerText
               .replace(/[\s\c]/g, '')
+              .replace(/\-$/g, '')
               .replace('„', '‘')
               .replace('‟', '’');
 
@@ -121,11 +120,12 @@ const COLORS = [
               const pos = segments[j][3].indexOf(noSpaceText);
 
               // Check for miss entries
-              pos === -1 && console.log('missed', noSpaceText, segments[j][3].slice(0, noSpaceText.length))
+              pos === -1 && console.log('missed:', '\n', noSpaceText, '\n', segments[j][3].slice(0, noSpaceText.length + 5))
 
               if (pos === -1)
                 continue;
 
+              segments[j-1] && (segments[j-1][3] = ''); 
               segments[j][3] = segments[j][3].replace(noSpaceText, '');
               span.style.backgroundColor = COLORS[j];
               break;
