@@ -1,8 +1,10 @@
 {
-  "appendix": true,
-  "body": false,
-  "cover": true,
-  "signature": false,
-  "toc": true,
+  "answer": {
+    "appendix": true,
+    "body": false,
+    "cover": true,
+    "signature": false,
+    "toc": true
+  },
   "rationale": "Body and signature could be better segmentated"
 }

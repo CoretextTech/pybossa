@@ -50,22 +50,19 @@ const COLORS = [
       const inputValid = validateInput(task.info, inputSchema);
   
       if (inputValid) {
-        const res = Promise.all([
-          fetch(task.info['json'], {
-            method: 'GET',
-            headers: {
-              'Content-Type': 'application/json;charset=utf-8'
-            }
-          })
+        Promise.all([
+          fetch(task.info['json'])
             .then(res => res.json())
             .then(json => {
               const dataValid = validateInput(json, jsonSchema);
               if (dataValid)
                 return Promise.resolve(json);
+              return Promise.reject(new Error('Invalid json data'));
             }),
           loadDocument(task.info['link'])
         ])
-          .then(([ json, doc ]) => deferred.resolve({ task, json, doc }));
+          .then(([ json, doc ]) => deferred.resolve({ task, json, doc }))
+          .catch(e => console.log(e));
       }
     }
   });
