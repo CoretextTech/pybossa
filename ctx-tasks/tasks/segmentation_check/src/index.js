@@ -42,6 +42,7 @@ const COLORS = [
   const $submit = $('#submit');
   const $rationale = $('#rationale');
   const $docBody = $('#all_pages');
+  const $render = $('#render_indicator');
   const $viewer = $('#viewer');
   const $segForm = $('#segmentation_form');
 
@@ -73,6 +74,7 @@ const COLORS = [
 
     if (doc) {
       $viewer.html('');
+      $render.show();
       renderPdfViewer(doc, $docBody.get(0));
 
       const segments = Object
@@ -128,6 +130,8 @@ const COLORS = [
               span.style.backgroundColor = COLORS[j];
               break;
             }
+
+            $render.hide();
           });
         }
       }, 500);

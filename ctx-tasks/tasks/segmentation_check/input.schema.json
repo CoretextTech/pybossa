@@ -1,24 +1,21 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "Segmentation Check Input Schema",
-  "type": "array",
-  "items": {
-    "type": "object",
-    "properties": {
-      "link": {
-        "description": "Link to the Document body (.docx or .pdf)",
-        "type": "string",
-        "pattern": "^((https?|http):\/\/.+[.](pdf|docx).*)*$"
-      },
-      "json": {
-        "description": "Link to the segmentation data (.json)",
-        "type": "string",
-        "pattern": "^((https?|http):\/\/.+[.](json|seg).*)*$"
-      } 
+  "type": "object",
+  "properties": {
+    "link": {
+      "description": "Link to the Document body (.docx or .pdf)",
+      "type": "string",
+      "pattern": "^((https?|http):\/\/.+[.](pdf|docx).*)*$"
     },
-    "required": [
-      "link",
-      "json"
-    ]
-  }
+    "json": {
+      "description": "Link to the segmentation data (.json)",
+      "type": "string",
+      "pattern": "^((https?|http):\/\/.+[.](json|seg).*)*$"
+    } 
+  },
+  "required": [
+    "link",
+    "json"
+  ]
 }

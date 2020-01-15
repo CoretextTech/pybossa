@@ -13,8 +13,22 @@ getDirectories('./tasks/').forEach(t => {
   const testInput = JSON.parse(fs.readFileSync(`./tasks/${t}/test/input.json`));
   const testOutput = JSON.parse(fs.readFileSync(`./tasks/${t}/test/output.json`));
 
-  const validInput = ajv.validate(inputSchema, testInput)
-  !validInput && console.log(t, 'invalid input:', ajv.errorsText())
+  let validInput = true;
+
+  if (Array.isArray(testInput)) {
+    for (const i in testInput) {
+      const valid = ajv.validate(inputSchema, testInput[i]);
+      if (!valid) {
+        validInput = valid;
+        console.log(t, `invalid input, item #${i}:`, ajv.errorsText())
+      }
+    }
+  }
+  else {
+    validInput = ajv.validate(inputSchema, testInput);
+    !validInput && console.log(t, 'invalid input:', ajv.errorsText())
+  }
+
 
   const validOutput = ajv.validate(outputSchema, testOutput)
   !validOutput && console.log(t, 'invalid output:', ajv.errorsText())
