@@ -12,19 +12,22 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
-const COLORS = [
-  '#e6194b',
-  '#3cb44b',
-  '#ffe119',
-  '#4363d8',
-  '#f58231',
-  '#911eb4',
-  '#46f0f0',
-  '#f032e6',
-  '#bcf60c',
-  '#fabebe',
-  '#008080',
-  '#e6beff',
+const COLORS = {
+  'cover': '#e6194b',
+  'body': '#3cb44b',
+  'toc': '#ffe119',
+  'appendix': '#4363d8',
+  'signature_1': '#f58231',
+  'signature_2': '#911eb4',
+  'signature_3': '#46f0f0',
+  'signature_4': '#f032e6',
+  'signature_5': '#bcf60c',
+  'signature_6': '#fabebe',
+  'signature_7': '#008080',
+  'signature_8': '#e6beff',
+};
+
+const FREE_COLORS = [
   '#9a6324',
   '#fffac8',
   '#800000',
@@ -91,7 +94,7 @@ const COLORS = [
       segments.forEach((s, i) => {
         $segForm.append(`
           <span style="
-            background: ${COLORS[i]};
+            background: ${COLORS[s[0]] || FREE_COLORS[i % FREE_COLORS.length]};
             width: 15px;
             height: 15px;
             display: inline-block;
@@ -128,7 +131,7 @@ const COLORS = [
 
               segments[j-1] && (segments[j-1][3] = ''); 
               segments[j][3] = segments[j][3].replace(noSpaceText, '');
-              span.style.backgroundColor = COLORS[j];
+              span.style.backgroundColor = COLORS[segments[j][0]] || FREE_COLORS[j % FREE_COLORS.length];
               break;
             }
 
