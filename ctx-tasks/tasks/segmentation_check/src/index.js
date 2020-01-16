@@ -12,19 +12,21 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
+const FIND_POS_TOLERANCE = 40;
+
 const COLORS = {
   'cover': '#e6194b',
   'body': '#3cb44b',
   'toc': '#ffe119',
   'appendix': '#4363d8',
-  'signature_1': '#f58231',
-  'signature_2': '#911eb4',
-  'signature_3': '#46f0f0',
-  'signature_4': '#f032e6',
-  'signature_5': '#bcf60c',
-  'signature_6': '#fabebe',
-  'signature_7': '#008080',
-  'signature_8': '#e6beff',
+  'signature_0': '#f58231',
+  'signature_1': '#911eb4',
+  'signature_2': '#46f0f0',
+  'signature_3': '#f032e6',
+  'signature_4': '#bcf60c',
+  'signature_5': '#fabebe',
+  'signature_6': '#008080',
+  'signature_7': '#e6beff',
 };
 
 const FREE_COLORS = [
@@ -126,7 +128,7 @@ const FREE_COLORS = [
               // Check for miss entries
               // pos === -1 && console.log('missed:', '\n', noSpaceText, '\n', segments[j][3].slice(0, noSpaceText.length + 5))
 
-              if (pos === -1)
+              if (pos === -1 || pos > FIND_POS_TOLERANCE)
                 continue;
 
               segments[j-1] && (segments[j-1][3] = ''); 
