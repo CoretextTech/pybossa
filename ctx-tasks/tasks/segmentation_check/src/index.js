@@ -12,7 +12,7 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
-const FIND_POS_TOLERANCE = 40;
+const FIND_POS_TOLERANCE = Infinity;
 
 const COLORS = {
   'cover': '#e6194b',
@@ -90,7 +90,11 @@ const FREE_COLORS = [
         .sort((s1, s2) => s1[1] - s2[1])
         .map(s => isFinite(s[2]) ? s : (s.splice(2,0,-1) && s))
         .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
-        .map(s => (s[3] = s[3] && s[3].replace(/[\s\c]/g, '')) && s)
+        .map(s => (s[3] = s[3] &&
+          s[3]
+            .replace(/´/g, '')
+            .replace(/[\s\c]/g, '')
+        ) && s)
         .filter(s => s);
 
       segments.forEach((s, i) => {
@@ -114,6 +118,7 @@ const FREE_COLORS = [
 
           $('.textLayer span').map((i, span) => {
             const noSpaceText = span.innerText
+              .replace(/\u0301/g, '')
               .replace(/[\s\c]/g, '')
               .replace(/\-$/g, '')
               .replace('„', '‘')
