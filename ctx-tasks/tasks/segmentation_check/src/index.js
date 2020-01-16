@@ -85,7 +85,8 @@ const COLORS = [
         .sort((s1, s2) => s1[1] - s2[1])
         .map(s => isFinite(s[2]) ? s : (s.splice(2,0,-1) && s))
         .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
-        .map(s => (s[3] = s[3].replace(/[\s\c]/g, '')) && s);
+        .map(s => (s[3] = s[3] && s[3].replace(/[\s\c]/g, '')) && s)
+        .filter(s => s);
 
       segments.forEach((s, i) => {
         $segForm.append(`
