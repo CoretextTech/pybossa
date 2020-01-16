@@ -120,7 +120,7 @@ const COLORS = [
               const pos = segments[j][3].indexOf(noSpaceText);
 
               // Check for miss entries
-              pos === -1 && console.log('missed:', '\n', noSpaceText, '\n', segments[j][3].slice(0, noSpaceText.length + 5))
+              // pos === -1 && console.log('missed:', '\n', noSpaceText, '\n', segments[j][3].slice(0, noSpaceText.length + 5))
 
               if (pos === -1)
                 continue;
