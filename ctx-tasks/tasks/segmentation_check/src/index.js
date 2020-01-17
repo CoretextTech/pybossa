@@ -49,24 +49,22 @@ const FREE_COLORS = [
   const $segForm = $('#segmentation_form');
 
   pybossa.taskLoaded(function(task, deferred) {
-    if (task && task.id) {
-      const inputValid = validateInput(task.info, inputSchema);
-  
-      if (inputValid) {
-        Promise.all([
-          fetch(task.info['json'])
-            .then(res => res.json())
-            .then(json => {
-              const dataValid = validateInput(json, jsonSchema);
-              if (dataValid)
-                return Promise.resolve(json);
-              return Promise.reject(new Error('Invalid json data'));
-            }),
-          loadDocument(task.info['link'])
-        ])
-          .then(([ json, doc ]) => deferred.resolve({ task, json, doc }))
-          .catch(e => console.log(e));
-      }
+    const valid = validateInput(task.info, inputSchema);
+
+    if (valid) {
+      Promise.all([
+        fetch(task.info['json'])
+          .then(res => res.json())
+          .then(json => {
+            const dataValid = validateInput(json, jsonSchema);
+            if (dataValid)
+              return Promise.resolve(json);
+            return Promise.reject(new Error('Invalid json data'));
+          }),
+        loadDocument(task.info['link'])
+      ])
+        .then(([ json, doc ]) => deferred.resolve({ task, json, doc }))
+        .catch(e => console.log(e));
     }
   });
 
