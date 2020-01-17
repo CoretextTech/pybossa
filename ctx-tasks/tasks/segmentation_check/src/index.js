@@ -12,8 +12,6 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
-const FIND_POS_TOLERANCE = Infinity;
-
 const COLORS = {
   'cover': '#e6194b',
   'body': '#3cb44b',
@@ -92,8 +90,7 @@ const FREE_COLORS = [
         .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
         .map(s => (s[3] = s[3] &&
           s[3]
-            .replace(/´/g, '')
-            .replace(/[\s\c]/g, '')
+            .replace(/[\s\c\-]/g, '')
         ) && s)
         .filter(s => s);
 
@@ -116,34 +113,30 @@ const FREE_COLORS = [
         if (!document.querySelector('.page .loadingIcon')) {
           clearInterval(onDocumentLoad);
 
-          $('.textLayer span').map((i, span) => {
-            const noSpaceText = span.innerText
-              .replace(/\u0301/g, '')
-              .replace(/[\s\c]/g, '')
-              .replace(/\-$/g, '')
-              .replace('„', '‘')
-              .replace('‟', '’');
+          const spanList = document.querySelectorAll('.textLayer span');
+          let j = 0;
+          segments.forEach((seg, i) => {
+            j--;
+            while (spanList[++j]) {
+              const noSpaceText = spanList[j].innerText
+                .replace(/\u0301/g, '´')
+                .replace(/[\s\c\-]/g, '')
+                .replace('„', '‘')
+                .replace('‟', '’');
 
-            for (const j in segments) {
-              if (!segments[j][3].length)
-                continue;
+              const pos = seg[3].indexOf(noSpaceText);
 
-              const pos = segments[j][3].indexOf(noSpaceText);
+              if (pos > -1) {
+                seg[3] = seg[3].replace(noSpaceText, '');
+                spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
+              }
 
-              // Check for miss entries
-              // pos === -1 && console.log('missed:', '\n', noSpaceText, '\n', segments[j][3].slice(0, noSpaceText.length + 5))
-
-              if (pos === -1 || pos > FIND_POS_TOLERANCE)
-                continue;
-
-              segments[j-1] && (segments[j-1][3] = ''); 
-              segments[j][3] = segments[j][3].replace(noSpaceText, '');
-              span.style.backgroundColor = COLORS[segments[j][0]] || FREE_COLORS[j % FREE_COLORS.length];
-              break;
+              if (!seg[3].length)
+                break;
             }
-
-            $render.hide();
           });
+          
+          $render.hide();
         }
       }, 500);
     }
