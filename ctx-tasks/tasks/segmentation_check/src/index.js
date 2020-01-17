@@ -112,44 +112,45 @@ const FREE_COLORS = [
       const onDocumentLoad = setInterval(() => {
         if (!document.querySelector('.page .loadingIcon')) {
           clearInterval(onDocumentLoad);
-
-          const spanList = document.querySelectorAll('.textLayer span');
-          let j = -1;
-
-          segments.forEach((seg, i) => {
-            let firstFound = false;
-            let misses = 0;
-            let missLength = 1;
-
-            while (spanList[++j]) {
-              const noSpaceText = spanList[j].innerText
-                .replace(/\u0301/g, '´')
-                .replace(/[\s\c\-]/g, '')
-                .replace('„', '‘')
-                .replace('‟', '’');
-
-              const pos = seg[3].indexOf(noSpaceText);
-
-              if (pos > -1 && pos <= missLength) {
-                firstFound = true;
-                seg[3] = seg[3].replace(noSpaceText, '');
-                spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
+          setTimeout(() => {
+            const spanList = document.querySelectorAll('.textLayer span');
+            let j = -1;
+  
+            segments.forEach((seg, i) => {
+              let firstFound = false;
+              let misses = 0;
+              let missLength = 1;
+  
+              while (spanList[++j]) {
+                const noSpaceText = spanList[j].innerText
+                  .replace(/\u0301/g, '´')
+                  .replace(/[\s\c\-]/g, '')
+                  .replace('„', '‘')
+                  .replace('‟', '’');
+  
+                const pos = seg[3].indexOf(noSpaceText);
+  
+                if (pos > -1 && pos <= missLength) {
+                  firstFound = true;
+                  seg[3] = seg[3].replace(noSpaceText, '');
+                  spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
+                }
+                else if (firstFound) {
+                  missLength += noSpaceText.length;
+                  misses++;
+                }
+  
+                if (!seg[3].length || misses >= MISS_COUNT_LIMIT) {
+                  j = j - misses;
+                  break;
+                }
               }
-              else if (firstFound) {
-                missLength += noSpaceText.length;
-                misses++;
-              }
-
-              if (!seg[3].length || misses >= MISS_COUNT_LIMIT) {
-                j = j - misses;
-                break;
-              }
-            }
-          });
-          
-          $render.hide();
+            });
+            
+            $render.hide();
+          }, 200);
         }
-      }, 500);
+      }, 200);
     }
     else {
       $viewer.html(`<p>${error}</p>`);
