@@ -12,6 +12,8 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
+const MISS_COUNT_LIMIT = 3;
+
 const COLORS = {
   'cover': '#e6194b',
   'body': '#3cb44b',
@@ -114,9 +116,13 @@ const FREE_COLORS = [
           clearInterval(onDocumentLoad);
 
           const spanList = document.querySelectorAll('.textLayer span');
-          let j = 0;
+          let j = -1;
+
           segments.forEach((seg, i) => {
-            j--;
+            let firstFound = false;
+            let misses = 0;
+            let missLength = 1;
+
             while (spanList[++j]) {
               const noSpaceText = spanList[j].innerText
                 .replace(/\u0301/g, '´')
@@ -126,13 +132,20 @@ const FREE_COLORS = [
 
               const pos = seg[3].indexOf(noSpaceText);
 
-              if (pos > -1) {
+              if (pos > -1 && pos <= missLength) {
+                firstFound = true;
                 seg[3] = seg[3].replace(noSpaceText, '');
                 spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
               }
+              else if (firstFound) {
+                missLength += noSpaceText.length;
+                misses++;
+              }
 
-              if (!seg[3].length)
+              if (!seg[3].length || misses >= MISS_COUNT_LIMIT) {
+                j = j - misses;
                 break;
+              }
             }
           });
           
