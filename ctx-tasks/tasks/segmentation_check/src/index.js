@@ -131,6 +131,7 @@ const FREE_COLORS = [
                 const pos = seg[3].indexOf(noSpaceText);
   
                 if (pos > -1 && pos <= missLength) {
+                  misses = 0;
                   firstFound = true;
                   seg[3] = seg[3].replace(noSpaceText, '');
                   spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
