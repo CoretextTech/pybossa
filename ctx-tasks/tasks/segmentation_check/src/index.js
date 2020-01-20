@@ -12,7 +12,7 @@ import jsonSchema from './segmentation-data.schema.json';
 
 const TASK_NAME = 'segmentation-check';
 
-const MISS_COUNT_LIMIT = 3;
+const SUFFICIENT_ENTRY_PERCENTAGE = 30;
 
 const COLORS = {
   'cover': '#e6194b',
@@ -84,14 +84,10 @@ const FREE_COLORS = [
           ? [...acc, ...json[k].reduce((acc, arr, i) => [...acc, [`${k}_${i}`, ...arr]], [])]
           : [...acc, [k, ...json[k]]]
         , [])
-        .filter(s => s[1] > -1)
+        .filter(s => s[1] > 0 || s[2] > 0)
         .sort((s1, s2) => s1[1] - s2[1])
         .map(s => isFinite(s[2]) ? s : (s.splice(2,0,-1) && s))
         .map(s => s.map(a => Array.isArray(a) ? a.join('') : a))
-        .map(s => (s[3] = s[3] &&
-          s[3]
-            .replace(/[\s\c\-]/g, '')
-        ) && s)
         .filter(s => s);
 
       segments.forEach((s, i) => {
@@ -113,37 +109,52 @@ const FREE_COLORS = [
         if (!document.querySelector('.page .loadingIcon')) {
           clearInterval(onDocumentLoad);
           setTimeout(() => {
+            const clearText = (text) => {
+              return (text || '')
+                .replace(/\u0301/g, '´')
+                .replace(/[\s\c\-]/g, '')
+                .replace('„', '‘')
+                .replace('‟', '’');
+            };
+
+            const highlightSpan = (spanIndex, segIndex) => {
+              spanList[spanIndex].style.backgroundColor =
+                COLORS[segments[segIndex][0]] ||
+                FREE_COLORS[segIndex % FREE_COLORS.length];
+            };
+
             const spanList = document.querySelectorAll('.textLayer span');
-            let j = -1;
-  
+            let j = 0;
+
             segments.forEach((seg, i) => {
-              let firstFound = false;
-              let misses = 0;
-              let missLength = 1;
-  
+              j--;
+              let sequenceLength = 0;
+              const clearSeg = clearText(seg[3]);
+
               while (spanList[++j]) {
-                const noSpaceText = spanList[j].innerText
-                  .replace(/\u0301/g, '´')
-                  .replace(/[\s\c\-]/g, '')
-                  .replace('„', '‘')
-                  .replace('‟', '’');
+                const clearSpanText = clearText(spanList[j].innerText);
   
-                const pos = seg[3].indexOf(noSpaceText);
+                const pos = clearSeg.indexOf(clearSpanText);
   
-                if (pos > -1 && pos <= missLength) {
-                  misses = 0;
-                  firstFound = true;
-                  seg[3] = seg[3].replace(noSpaceText, '');
-                  spanList[j].style.backgroundColor = COLORS[seg[0]] || FREE_COLORS[i % FREE_COLORS.length];
+                if (pos > -1) {
+                  sequenceLength += clearSpanText.length;
+  
+                  if (sequenceLength / clearSeg.length * 100 >= SUFFICIENT_ENTRY_PERCENTAGE) {
+                    highlightSpan(j, i);
+                    let k = j;
+                    let forw = pos + clearSpanText.length,
+                        back = pos;
+
+                    while (spanList[++j] && (forw += clearText(spanList[j].innerText).length) <= clearSeg.length)
+                      highlightSpan(j, i);
+                    while (spanList[--k] && (back -= clearText(spanList[k].innerText).length) >= 0)
+                      highlightSpan(k, i);
+
+                    break;
+                  }
                 }
-                else if (firstFound) {
-                  missLength += noSpaceText.length;
-                  misses++;
-                }
-  
-                if (!seg[3].length || misses >= MISS_COUNT_LIMIT) {
-                  j = j - misses;
-                  break;
+                else {
+                  sequenceLength = 0;
                 }
               }
             });
