@@ -118,43 +118,45 @@ const FREE_COLORS = [
             };
 
             const highlightSpan = (spanIndex, segIndex) => {
-              spanList[spanIndex].style.backgroundColor =
-                COLORS[segments[segIndex][0]] ||
-                FREE_COLORS[segIndex % FREE_COLORS.length];
+              spanList[spanIndex].style.backgroundColor || 
+                (spanList[spanIndex].style.backgroundColor =
+                  COLORS[segments[segIndex][0]] ||
+                  FREE_COLORS[segIndex % FREE_COLORS.length]);
             };
 
             const spanList = document.querySelectorAll('.textLayer span');
-            let j = 0;
+            let j = -1;
 
             segments.forEach((seg, i) => {
-              j--;
               let sequenceLength = 0;
-              const clearSeg = clearText(seg[3]);
+              let clearSeg = clearText(seg[3]);
+              const clearSegLength = clearSeg.length;
 
               while (spanList[++j]) {
                 const clearSpanText = clearText(spanList[j].innerText);
-  
                 const pos = clearSeg.indexOf(clearSpanText);
   
                 if (pos > -1) {
+                  clearSeg = clearSeg.replace(clearSpanText, '');
                   sequenceLength += clearSpanText.length;
   
-                  if (sequenceLength / clearSeg.length * 100 >= SUFFICIENT_ENTRY_PERCENTAGE) {
+                  if (sequenceLength / clearSegLength * 100 >= SUFFICIENT_ENTRY_PERCENTAGE) {
                     highlightSpan(j, i);
                     let k = j;
-                    let forw = pos + clearSpanText.length,
-                        back = pos;
+                    let forw = pos + sequenceLength,
+                        back = pos + sequenceLength - clearSpanText.length;
 
-                    while (spanList[++j] && (forw += clearText(spanList[j].innerText).length) <= clearSeg.length)
+                    while (forw < clearSegLength && spanList[++j]) {
+                      forw += clearText(spanList[j].innerText).length;
                       highlightSpan(j, i);
-                    while (spanList[--k] && (back -= clearText(spanList[k].innerText).length) >= 0)
+                    }
+                    while (back > 0 && spanList[--k]) {
+                      back -= clearText(spanList[k].innerText).length;
                       highlightSpan(k, i);
+                    }
 
                     break;
                   }
-                }
-                else {
-                  sequenceLength = 0;
                 }
               }
             });
